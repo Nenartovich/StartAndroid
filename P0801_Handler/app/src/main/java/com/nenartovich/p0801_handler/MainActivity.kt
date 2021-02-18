@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         tvInfo = findViewById(R.id.tvInfo)
         bStart = findViewById(R.id.bStart)
-        handler = object : Handler() {
+        handler = object: Handler() {
             override fun handleMessage(msg: android.os.Message) {
                 tvInfo.text = "${msg.what} file(s) downloaded"
                 if (msg.what == 10) bStart.isEnabled = true
