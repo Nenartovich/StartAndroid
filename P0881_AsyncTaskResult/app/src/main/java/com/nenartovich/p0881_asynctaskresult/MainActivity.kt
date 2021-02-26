@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeoutException
 
 class MainActivity : AppCompatActivity() {
     val LOG_TAG = "myLogs"
@@ -35,9 +36,15 @@ class MainActivity : AppCompatActivity() {
         if (myTask == null) return
         var result = -1
         Log.d(LOG_TAG, "Try to get result")
-        result = myTask!!.get()!!
-        Log.d(LOG_TAG, "get returns $result")
-        Toast.makeText(this, "get returns $result", Toast.LENGTH_SHORT).show()
+        try {
+            result = myTask!!.get(3, TimeUnit.SECONDS)!!
+            Log.d(LOG_TAG, "get returns $result")
+            Toast.makeText(this, "get returns $result", Toast.LENGTH_SHORT).show()
+        } catch (e : TimeoutException) {
+            Toast.makeText(this, "Timout exception :(", Toast.LENGTH_SHORT).show()
+        }
+
+
     }
 
     inner class MyTask : AsyncTask<Unit, Unit, Int?>() {
@@ -48,7 +55,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         override fun doInBackground(vararg p0: Unit?): Int {
-            TimeUnit.SECONDS.sleep(3)
+            TimeUnit.SECONDS.sleep(5)
             return 100500
         }
 
